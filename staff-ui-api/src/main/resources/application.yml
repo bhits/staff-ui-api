@@ -1,0 +1,20 @@
+server:
+  port: 8462
+logging:
+  file: /java/C2S_LOGS/staff-ui-api/StaffUiApi.log
+info:
+  component: Staff Ui Api
+ribbon:
+  ReadTimeout: 50000
+hystrix.command.default.execution.timeout.enabled: false
+security:
+  oauth2:
+    client:
+      client-id: staff-ui-api
+---
+spring.profiles: standalone-ssl
+spring:
+  profiles:
+    include: ssl-default
+server:
+  context-path: /staff-ui-api

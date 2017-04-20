@@ -2,10 +2,7 @@ package gov.samhsa.c2s.staffuiapi.infrastructure;
 
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UserDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient("ums")
 public interface UmsClient {
@@ -19,4 +16,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/search", method = RequestMethod.GET)
     Object searchUsersByFirstNameAndORLastName(@RequestParam("term") String term);
+
+    @RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
+    Object getUser(@PathVariable("userId") Long userId);
 }

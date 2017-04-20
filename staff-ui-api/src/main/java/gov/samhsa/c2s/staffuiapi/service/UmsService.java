@@ -8,4 +8,6 @@ public interface UmsService {
     void registerUser(UserDto userDto);
 
     Object searchUsersByFirstNameAndORLastName(String term);
+
+    Object getUser(Long userId);
 }

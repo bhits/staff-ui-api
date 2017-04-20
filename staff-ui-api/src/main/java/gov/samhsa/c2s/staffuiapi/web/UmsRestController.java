@@ -31,4 +31,9 @@ public class UmsRestController {
     public Object searchUsersByFirstNameAndORLastName(@RequestParam("term") String term) {
         return umsService.searchUsersByFirstNameAndORLastName(term);
     }
+
+    @GetMapping("/{userId}")
+    public Object getUser(@PathVariable Long userId) {
+        return umsService.getUser(userId);
+    }
 }

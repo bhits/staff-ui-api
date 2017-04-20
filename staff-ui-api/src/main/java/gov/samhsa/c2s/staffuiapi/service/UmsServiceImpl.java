@@ -24,4 +24,9 @@ public class UmsServiceImpl implements UmsService {
     public Object searchUsersByFirstNameAndORLastName(String term) {
         return umsClient.searchUsersByFirstNameAndORLastName(term);
     }
+
+    @Override
+    public Object getUser(Long userId) {
+        return umsClient.getUser(userId);
+    }
 }

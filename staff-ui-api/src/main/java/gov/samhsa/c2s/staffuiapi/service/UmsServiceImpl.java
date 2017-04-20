@@ -19,4 +19,9 @@ public class UmsServiceImpl implements UmsService {
     public void registerUser(UserDto userDto) {
         umsClient.registerUser(userDto);
     }
+
+    @Override
+    public Object searchUsersByFirstNameAndORLastName(String term) {
+        return umsClient.searchUsersByFirstNameAndORLastName(term);
+    }
 }

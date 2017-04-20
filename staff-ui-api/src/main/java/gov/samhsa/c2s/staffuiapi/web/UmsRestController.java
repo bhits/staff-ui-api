@@ -26,4 +26,9 @@ public class UmsRestController {
     public void registerUser(@Valid @RequestBody UserDto userDto) {
         umsService.registerUser(userDto);
     }
+
+    @GetMapping("/search")
+    public Object searchUsersByFirstNameAndORLastName(@RequestParam("term") String term) {
+        return umsService.searchUsersByFirstNameAndORLastName(term);
+    }
 }

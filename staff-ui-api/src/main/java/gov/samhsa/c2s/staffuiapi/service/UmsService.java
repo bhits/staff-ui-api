@@ -6,4 +6,6 @@ public interface UmsService {
     Object getAllUsers(Integer page, Integer size);
 
     void registerUser(UserDto userDto);
+
+    Object searchUsersByFirstNameAndORLastName(String term);
 }

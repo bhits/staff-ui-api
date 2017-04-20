@@ -10,4 +10,6 @@ public interface UmsService {
     Object searchUsersByFirstNameAndORLastName(String term);
 
     Object getUser(Long userId);
+
+    void updateUser(Long userId, UserDto userDto);
 }

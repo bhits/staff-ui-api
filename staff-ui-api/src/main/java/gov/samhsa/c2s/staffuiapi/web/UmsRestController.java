@@ -36,4 +36,9 @@ public class UmsRestController {
     public Object getUser(@PathVariable Long userId) {
         return umsService.getUser(userId);
     }
+
+    @PutMapping("/{userId}")
+    public void editUser(@PathVariable Long userId, @Valid @RequestBody UserDto userDto) {
+        umsService.updateUser(userId, userDto);
+    }
 }

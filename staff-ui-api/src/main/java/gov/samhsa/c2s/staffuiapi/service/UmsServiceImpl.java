@@ -29,4 +29,9 @@ public class UmsServiceImpl implements UmsService {
     public Object getUser(Long userId) {
         return umsClient.getUser(userId);
     }
+
+    @Override
+    public void updateUser(Long userId, UserDto userDto) {
+        umsClient.updateUser(userId, userDto);
+    }
 }

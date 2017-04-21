@@ -22,4 +22,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/{userId}", method = RequestMethod.PUT)
     void updateUser(@PathVariable("userId") Long userId, @RequestBody UserDto userDto);
+
+    @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.POST)
+    Object initiateUserActivation(@PathVariable("userId") Long userId);
 }

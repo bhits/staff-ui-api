@@ -41,4 +41,9 @@ public class UmsRestController {
     public void editUser(@PathVariable Long userId, @Valid @RequestBody UserDto userDto) {
         umsService.updateUser(userId, userDto);
     }
+
+    @PostMapping(value = "/{userId}/activation")
+    public Object initiateUserActivation(@PathVariable Long userId) {
+        return umsService.initiateUserActivation(userId);
+    }
 }

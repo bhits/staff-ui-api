@@ -34,4 +34,9 @@ public class UmsServiceImpl implements UmsService {
     public void updateUser(Long userId, UserDto userDto) {
         umsClient.updateUser(userId, userDto);
     }
+
+    @Override
+    public Object initiateUserActivation(Long userId) {
+        return umsClient.initiateUserActivation(userId);
+    }
 }

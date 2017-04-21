@@ -40,7 +40,7 @@ public class UmsServiceImpl implements UmsService {
 
     @Override
     public void registerUser(UserDto userDto) {
-        umsClient.registerUser(userDto);
+        umsClient.registerUser(modelMapper.map(userDto, UmsUserDto.class));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UmsServiceImpl implements UmsService {
 
     @Override
     public void updateUser(Long userId, UserDto userDto) {
-        umsClient.updateUser(userId, userDto);
+        umsClient.updateUser(userId, modelMapper.map(userDto, UmsUserDto.class));
     }
 
     @Override

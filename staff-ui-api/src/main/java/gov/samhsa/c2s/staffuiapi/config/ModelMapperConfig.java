@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +27,7 @@ public class ModelMapperConfig {
         return modelMapper;
     }
 
+    // PropertyMaps
     @Component
     static class UmsUserDtoToUserDtoMap extends PropertyMap<UmsUserDto, UserDto> {
         @Autowired
@@ -41,6 +43,18 @@ public class ModelMapperConfig {
         }
     }
 
+    @Component
+    static class UserDtoToUmsUserDtoMap extends PropertyMap<UserDto, UmsUserDto> {
+        @Autowired
+        private EmailPhoneToTelecomConverter emailPhoneToTelecomConverter;
+
+        @Override
+        protected void configure() {
+            using(emailPhoneToTelecomConverter).map(source).setTelecom(null);
+        }
+    }
+
+    // Converters
     @Component
     static class TelecomToEmailConverter extends AbstractConverter<UmsUserDto, String> {
 
@@ -63,6 +77,22 @@ public class ModelMapperConfig {
                     .map(TelecomDto::getValue)
                     .findFirst()
                     .orElse(null);
+        }
+    }
+
+    @Component
+    static class EmailPhoneToTelecomConverter extends AbstractConverter<UserDto, List<TelecomDto>> {
+        @Override
+        protected List<TelecomDto> convert(UserDto source) {
+            TelecomDto emailTelecomDto = TelecomDto.builder()
+                    .system(SYSTEM_EMAIL)
+                    .value(source.getEmail())
+                    .build();
+            TelecomDto phoneTelecomDto = TelecomDto.builder()
+                    .system(SYSTEM_PHONE)
+                    .value(source.getPhone())
+                    .build();
+            return Arrays.asList(emailTelecomDto, phoneTelecomDto);
         }
     }
 }

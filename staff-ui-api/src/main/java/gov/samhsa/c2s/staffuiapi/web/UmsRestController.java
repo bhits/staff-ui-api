@@ -1,12 +1,14 @@
 package gov.samhsa.c2s.staffuiapi.web;
 
-import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UserDto;
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.PageableDto;
 import gov.samhsa.c2s.staffuiapi.service.UmsService;
+import gov.samhsa.c2s.staffuiapi.service.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("ums/users")
@@ -16,8 +18,8 @@ public class UmsRestController {
     private UmsService umsService;
 
     @GetMapping
-    public Object getUsers(@RequestParam(value = "page", required = false) Integer page,
-                           @RequestParam(value = "size", required = false) Integer size) {
+    public PageableDto<UserDto> getUsers(@RequestParam(value = "page", required = false) Integer page,
+                                         @RequestParam(value = "size", required = false) Integer size) {
         return umsService.getAllUsers(page, size);
     }
 
@@ -28,12 +30,12 @@ public class UmsRestController {
     }
 
     @GetMapping("/search")
-    public Object searchUsersByFirstNameAndORLastName(@RequestParam("term") String term) {
+    public List<UserDto> searchUsersByFirstNameAndORLastName(@RequestParam("term") String term) {
         return umsService.searchUsersByFirstNameAndORLastName(term);
     }
 
     @GetMapping("/{userId}")
-    public Object getUser(@PathVariable Long userId) {
+    public UserDto getUser(@PathVariable Long userId) {
         return umsService.getUser(userId);
     }
 

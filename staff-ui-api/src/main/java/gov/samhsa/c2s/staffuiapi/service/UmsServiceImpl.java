@@ -59,4 +59,9 @@ public class UmsServiceImpl implements UmsService {
     public void updateUser(Long userId, UserDto userDto) {
         umsClient.updateUser(userId, modelMapper.map(userDto, UmsUserDto.class));
     }
+
+    @Override
+    public Object initiateUserActivation(Long userId) {
+        return umsClient.initiateUserActivation(userId);
+    }
 }

@@ -8,9 +8,14 @@ import javax.validation.constraints.Pattern;
 public class AddressDto {
 
     /**
-     * The street address line.
+     * The street address line1.
      */
-    private String streetAddressLine;
+    private String streetAddressLine1;
+
+    /**
+     * The street address line2.
+     */
+    private String streetAddressLine2;
 
     /**
      * The city.

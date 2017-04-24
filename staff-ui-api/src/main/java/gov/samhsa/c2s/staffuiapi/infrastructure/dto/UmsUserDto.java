@@ -11,6 +11,8 @@ public class UmsUserDto {
 
     private String lastName;
 
+    private String middleName;
+
     private String firstName;
 
     private LocalDate birthDate;

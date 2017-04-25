@@ -9,6 +9,9 @@ import java.util.List;
 
 @FeignClient("ums")
 public interface UmsClient {
+    public static final String X_FORWARDED_PROTO = "X-Forwarded-Proto";
+    public static final String X_FORWARDED_HOST = "X-Forwarded-Host";
+    public static final String X_FORWARDED_PORT = "X-Forwarded-Port";
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     PageableDto<UmsUserDto> getAllUsers(@RequestParam(value = "page", required = false) Integer page,
@@ -27,7 +30,10 @@ public interface UmsClient {
     void updateUser(@PathVariable("userId") Long userId, @RequestBody UmsUserDto umsUserDto);
 
     @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.POST)
-    Object initiateUserActivation(@PathVariable("userId") Long userId);
+    Object initiateUserActivation(@PathVariable("userId") Long userId,
+                                  @RequestHeader(X_FORWARDED_PROTO) String xForwardedProto,
+                                  @RequestHeader(X_FORWARDED_HOST) String xForwardedHost,
+                                  @RequestHeader(X_FORWARDED_PORT) int xForwardedPort);
 
     @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.GET)
     Object getCurrentUserCreationInfo(@PathVariable("userId") Long userId);

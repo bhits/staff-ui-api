@@ -61,8 +61,8 @@ public class UmsServiceImpl implements UmsService {
     }
 
     @Override
-    public Object initiateUserActivation(Long userId) {
-        return umsClient.initiateUserActivation(userId);
+    public Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, int xForwardedPort) {
+        return umsClient.initiateUserActivation(userId, xForwardedProto, xForwardedHost, xForwardedPort);
     }
 
     @Override

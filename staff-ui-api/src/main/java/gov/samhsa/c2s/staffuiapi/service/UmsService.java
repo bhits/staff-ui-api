@@ -16,7 +16,7 @@ public interface UmsService {
 
     void updateUser(Long userId, UserDto userDto);
 
-    Object initiateUserActivation(Long userId);
+    Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, int xForwardedPort);
 
     Object getCurrentUserCreationInfo(Long userId);
 }

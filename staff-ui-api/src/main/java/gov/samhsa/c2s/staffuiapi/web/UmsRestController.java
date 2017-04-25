@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static gov.samhsa.c2s.staffuiapi.infrastructure.UmsClient.*;
+
 @RestController
 @RequestMapping("ums/users")
 public class UmsRestController {
@@ -46,8 +48,11 @@ public class UmsRestController {
 
     @PostMapping(value = "/{userId}/activation")
     @ResponseStatus(HttpStatus.CREATED)
-    public Object initiateUserActivation(@PathVariable Long userId) {
-        return umsService.initiateUserActivation(userId);
+    public Object initiateUserActivation(@PathVariable Long userId,
+                                         @RequestHeader(X_FORWARDED_PROTO) String xForwardedProto,
+                                         @RequestHeader(X_FORWARDED_HOST) String xForwardedHost,
+                                         @RequestHeader(X_FORWARDED_PORT) int xForwardedPort) {
+        return umsService.initiateUserActivation(userId, xForwardedProto, xForwardedHost, xForwardedPort);
     }
 
     @GetMapping(value = "/{userId}/activation")

@@ -1,6 +1,5 @@
 package gov.samhsa.c2s.staffuiapi.service.dto;
 
-import gov.samhsa.c2s.staffuiapi.infrastructure.dto.AddressDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.RoleDto;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

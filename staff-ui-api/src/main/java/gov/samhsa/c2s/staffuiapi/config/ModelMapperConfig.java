@@ -40,6 +40,10 @@ public class ModelMapperConfig {
         protected void configure() {
             using(telecomToEmailConverter).map(source).setEmail(null);
             using(telecomToPhoneConverter).map(source).setPhone(null);
+            map().getAddress().setLine1(source.getAddress().getStreetAddressLine1());
+            map().getAddress().setLine2(source.getAddress().getStreetAddressLine2());
+            map().getAddress().setState(source.getAddress().getStateCode());
+            map().getAddress().setCountry(source.getAddress().getCountryCode());
         }
     }
 
@@ -51,6 +55,10 @@ public class ModelMapperConfig {
         @Override
         protected void configure() {
             using(emailPhoneToTelecomConverter).map(source).setTelecom(null);
+            map().getAddress().setStreetAddressLine1(source.getAddress().getLine1());
+            map().getAddress().setStreetAddressLine2(source.getAddress().getLine2());
+            map().getAddress().setStateCode(source.getAddress().getState());
+            map().getAddress().setCountryCode(source.getAddress().getCountry());
         }
     }
 

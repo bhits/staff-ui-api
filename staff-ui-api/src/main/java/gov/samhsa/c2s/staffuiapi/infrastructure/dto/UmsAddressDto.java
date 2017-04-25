@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class AddressDto {
+public class UmsAddressDto {
 
     /**
      * The street address line1.

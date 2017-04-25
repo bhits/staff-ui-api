@@ -21,7 +21,7 @@ public class UmsUserDto {
 
     private String socialSecurityNumber;
 
-    private AddressDto address;
+    private UmsAddressDto address;
 
     private List<TelecomDto> telecom;
 

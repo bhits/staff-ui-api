@@ -45,7 +45,13 @@ public class UmsRestController {
     }
 
     @PostMapping(value = "/{userId}/activation")
+    @ResponseStatus(HttpStatus.CREATED)
     public Object initiateUserActivation(@PathVariable Long userId) {
         return umsService.initiateUserActivation(userId);
+    }
+
+    @GetMapping(value = "/{userId}/activation")
+    public Object getCurrentUserCreationInfo(@PathVariable Long userId) {
+        return umsService.getCurrentUserCreationInfo(userId);
     }
 }

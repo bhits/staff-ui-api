@@ -17,4 +17,6 @@ public interface UmsService {
     void updateUser(Long userId, UserDto userDto);
 
     Object initiateUserActivation(Long userId);
+
+    Object getCurrentUserCreationInfo(Long userId);
 }

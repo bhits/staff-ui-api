@@ -28,4 +28,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.POST)
     Object initiateUserActivation(@PathVariable("userId") Long userId);
+
+    @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.GET)
+    Object getCurrentUserCreationInfo(@PathVariable("userId") Long userId);
 }

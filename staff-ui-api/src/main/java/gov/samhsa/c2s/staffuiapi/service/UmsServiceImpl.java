@@ -64,4 +64,9 @@ public class UmsServiceImpl implements UmsService {
     public Object initiateUserActivation(Long userId) {
         return umsClient.initiateUserActivation(userId);
     }
+
+    @Override
+    public Object getCurrentUserCreationInfo(Long userId) {
+        return umsClient.getCurrentUserCreationInfo(userId);
+    }
 }

@@ -74,4 +74,9 @@ public class UmsServiceImpl implements UmsService {
     public void disableUser(Long userId) {
         umsClient.disableUser(userId);
     }
+
+    @Override
+    public void enableUser(Long userId) {
+        umsClient.enableUser(userId);
+    }
 }

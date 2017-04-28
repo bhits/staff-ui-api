@@ -40,4 +40,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/{userId}/disabled", method = RequestMethod.PUT)
     void disableUser(@PathVariable("userId") Long userId);
+
+    @RequestMapping(value = "/users/{userId}/enabled", method = RequestMethod.PUT)
+    void enableUser(@PathVariable("userId") Long userId);
 }

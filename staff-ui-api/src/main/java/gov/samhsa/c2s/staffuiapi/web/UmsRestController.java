@@ -64,4 +64,9 @@ public class UmsRestController {
     public void disableUser(@PathVariable Long userId) {
         umsService.disableUser(userId);
     }
+
+    @PutMapping("/{userId}/enabled")
+    public void enableUser(@PathVariable Long userId) {
+        umsService.enableUser(userId);
+    }
 }

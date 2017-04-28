@@ -21,4 +21,6 @@ public interface UmsService {
     Object getCurrentUserCreationInfo(Long userId);
 
     void disableUser(Long userId);
+
+    void enableUser(Long userId);
 }

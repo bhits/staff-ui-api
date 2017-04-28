@@ -1,13 +1,12 @@
 package gov.samhsa.c2s.staffuiapi.service.dto;
 
-import gov.samhsa.c2s.staffuiapi.infrastructure.dto.RoleDto;
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsAddressDto;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class UserDto {
@@ -38,12 +37,13 @@ public class UserDto {
 
     private String workPhone;
 
-    private AddressDto homeAddress;
+    private UmsAddressDto homeAddress;
 
-    private AddressDto workAddress;
+    private UmsAddressDto workAddress;
 
+    //ToDO: One user has multiple roles
     @NotNull
-    private List<RoleDto> roles;
+    private String roles;
 
     @NotBlank
     private String locale;

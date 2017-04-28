@@ -1,9 +1,9 @@
 package gov.samhsa.c2s.staffuiapi.config;
 
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.RoleDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.TelecomDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsAddressDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsUserDto;
-import gov.samhsa.c2s.staffuiapi.service.dto.AddressDto;
 import gov.samhsa.c2s.staffuiapi.service.dto.UserDto;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
@@ -58,6 +58,9 @@ public class ModelMapperConfig {
         @Autowired
         private UmsAddressesToWorkAddressConverter umsAddressesToWorkAddressConverter;
 
+        @Autowired
+        private MultiRolesToPatientRoleConverter multiRolesToPatientRoleConverter;
+
         @Override
         protected void configure() {
             using(telecomsToHomeEmailConverter).map(source).setHomeEmail(null);
@@ -66,6 +69,8 @@ public class ModelMapperConfig {
             using(telecomsToWorkPhoneConverter).map(source).setWorkPhone(null);
             using(umsAddressesToHomeAddressConverter).map(source).setHomeAddress(null);
             using(umsAddressesToWorkAddressConverter).map(source).setWorkAddress(null);
+            //ToDO: One user has multiple roles
+            using(multiRolesToPatientRoleConverter).map(source).setRoles(null);
         }
     }
 
@@ -77,10 +82,15 @@ public class ModelMapperConfig {
         @Autowired
         private HomeWorkAddressToAddressesConverter homeWorkAddressToAddressesConverter;
 
+        @Autowired
+        private PatientRoleToMultiRolesConverter patientRoleToMultiRolesConverter;
+
         @Override
         protected void configure() {
             using(emailPhoneToTelecomsConverter).map(source).setTelecoms(null);
             using(homeWorkAddressToAddressesConverter).map(source).setAddresses(null);
+            //ToDO: One user has multiple roles
+            using(patientRoleToMultiRolesConverter).map(source).setRoles(null);
         }
     }
 
@@ -137,6 +147,7 @@ public class ModelMapperConfig {
         }
     }
 
+    //Todo: Will support multiple Telecoms
     @Component
     static class EmailPhoneToTelecomsConverter extends AbstractConverter<UserDto, List<TelecomDto>> {
         @Override
@@ -151,89 +162,64 @@ public class ModelMapperConfig {
                     .value(source.getHomePhone())
                     .use(Use.HOME.toString())
                     .build();
-            TelecomDto workEmailTelecomDto = TelecomDto.builder()
-                    .system(System.EMAIL.toString())
-                    .value(source.getWorkEmail())
-                    .use(Use.WORK.toString())
-                    .build();
-            TelecomDto workPhoneTelecomDto = TelecomDto.builder()
-                    .system(System.PHONE.toString())
-                    .value(source.getWorkPhone())
-                    .use(Use.WORK.toString())
-                    .build();
-            return Arrays.asList(homeEmailTelecomDto, homePhoneTelecomDto, workEmailTelecomDto, workPhoneTelecomDto);
+            return Arrays.asList(homeEmailTelecomDto, homePhoneTelecomDto);
         }
     }
 
     @Component
-    static class UmsAddressesToHomeAddressConverter extends AbstractConverter<UmsUserDto, AddressDto> {
+    static class UmsAddressesToHomeAddressConverter extends AbstractConverter<UmsUserDto, UmsAddressDto> {
         @Override
-        protected AddressDto convert(UmsUserDto source) {
+        protected UmsAddressDto convert(UmsUserDto source) {
             return source.getAddresses().stream()
                     .filter(umsAddressDto -> umsAddressDto.getUse().equalsIgnoreCase(Use.HOME.toString()))
-                    .map(this::mapToAddressDto)
                     .findFirst()
                     .orElse(null);
-        }
-
-        private AddressDto mapToAddressDto(UmsAddressDto umsAddressDto) {
-            return AddressDto.builder()
-                    .line1(umsAddressDto.getLine1())
-                    .line2(umsAddressDto.getLine2())
-                    .city(umsAddressDto.getCity())
-                    .state(umsAddressDto.getStateCode())
-                    .postalCode(umsAddressDto.getPostalCode())
-                    .country(umsAddressDto.getCountryCode())
-                    .build();
         }
     }
 
     @Component
-    static class UmsAddressesToWorkAddressConverter extends AbstractConverter<UmsUserDto, AddressDto> {
+    static class UmsAddressesToWorkAddressConverter extends AbstractConverter<UmsUserDto, UmsAddressDto> {
         @Override
-        protected AddressDto convert(UmsUserDto source) {
+        protected UmsAddressDto convert(UmsUserDto source) {
             return source.getAddresses().stream()
                     .filter(umsAddressDto -> umsAddressDto.getUse().equalsIgnoreCase(Use.WORK.toString()))
-                    .map(this::mapToAddressDto)
                     .findFirst()
                     .orElse(null);
         }
-
-        private AddressDto mapToAddressDto(UmsAddressDto umsAddressDto) {
-            return AddressDto.builder()
-                    .line1(umsAddressDto.getLine1())
-                    .line2(umsAddressDto.getLine2())
-                    .city(umsAddressDto.getCity())
-                    .state(umsAddressDto.getStateCode())
-                    .postalCode(umsAddressDto.getPostalCode())
-                    .country(umsAddressDto.getCountryCode())
-                    .build();
-        }
     }
 
+    //Todo: Will support multiple address
     @Component
     static class HomeWorkAddressToAddressesConverter extends AbstractConverter<UserDto, List<UmsAddressDto>> {
         @Override
         protected List<UmsAddressDto> convert(UserDto source) {
-            UmsAddressDto homeAddressDto = UmsAddressDto.builder()
-                    .line1(source.getHomeAddress().getLine1())
-                    .line2(source.getHomeAddress().getLine2())
-                    .city(source.getHomeAddress().getCity())
-                    .stateCode(source.getHomeAddress().getState())
-                    .postalCode(source.getHomeAddress().getPostalCode())
-                    .countryCode(source.getHomeAddress().getCountry())
-                    .use(Use.HOME.toString())
-                    .build();
-            UmsAddressDto workAddressDto = UmsAddressDto.builder()
-                    .line1(source.getWorkAddress().getLine1())
-                    .line2(source.getWorkAddress().getLine2())
-                    .city(source.getWorkAddress().getCity())
-                    .stateCode(source.getWorkAddress().getState())
-                    .postalCode(source.getWorkAddress().getPostalCode())
-                    .countryCode(source.getWorkAddress().getCountry())
-                    .use(Use.WORK.toString())
-                    .build();
-            return Arrays.asList(homeAddressDto, workAddressDto);
+            UmsAddressDto homeAddressDto = source.getHomeAddress();
+            homeAddressDto.setUse(Use.HOME.toString());
+            return Arrays.asList(homeAddressDto);
+        }
+    }
+
+    //Todo: Will remove when One user has multiple roles
+    @Component
+    static class MultiRolesToPatientRoleConverter extends AbstractConverter<UmsUserDto, String> {
+
+        @Override
+        protected String convert(UmsUserDto source) {
+            return source.getRoles().stream()
+                    .filter(roleDto -> roleDto.getCode().equalsIgnoreCase("patient"))
+                    .map(RoleDto::getCode)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    @Component
+    static class PatientRoleToMultiRolesConverter extends AbstractConverter<UserDto, List<RoleDto>> {
+        @Override
+        protected List<RoleDto> convert(UserDto source) {
+            RoleDto roleDto = new RoleDto();
+            roleDto.setCode(source.getRoles());
+            return Arrays.asList(roleDto);
         }
     }
 }

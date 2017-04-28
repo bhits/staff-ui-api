@@ -1,7 +1,9 @@
 package gov.samhsa.c2s.staffuiapi.config;
 
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.TelecomDto;
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsAddressDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsUserDto;
+import gov.samhsa.c2s.staffuiapi.service.dto.AddressDto;
 import gov.samhsa.c2s.staffuiapi.service.dto.UserDto;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
@@ -17,8 +19,6 @@ import java.util.Objects;
 
 @Configuration
 public class ModelMapperConfig {
-    private static final String SYSTEM_EMAIL = "email";
-    private static final String SYSTEM_PHONE = "phone";
 
     @Bean
     public ModelMapper modelMapper(List<PropertyMap> propertyMaps) {
@@ -27,49 +27,71 @@ public class ModelMapperConfig {
         return modelMapper;
     }
 
+    private enum Use {
+        HOME,
+        WORK
+    }
+
+    private enum System {
+        PHONE,
+        EMAIL
+    }
+
     // PropertyMaps
     @Component
     static class UmsUserDtoToUserDtoMap extends PropertyMap<UmsUserDto, UserDto> {
         @Autowired
-        private TelecomToEmailConverter telecomToEmailConverter;
+        private TelecomsToHomeEmailConverter telecomsToHomeEmailConverter;
 
         @Autowired
-        private TelecomToPhoneConverter telecomToPhoneConverter;
+        private TelecomsToWorkEmailConverter telecomsToWorkEmailConverter;
+
+        @Autowired
+        private TelecomsToHomePhoneConverter telecomsToHomePhoneConverter;
+
+        @Autowired
+        private TelecomsToWorkPhoneConverter telecomsToWorkPhoneConverter;
+
+        @Autowired
+        private UmsAddressesToHomeAddressConverter umsAddressesToHomeAddressConverter;
+
+        @Autowired
+        private UmsAddressesToWorkAddressConverter umsAddressesToWorkAddressConverter;
 
         @Override
         protected void configure() {
-            using(telecomToEmailConverter).map(source).setEmail(null);
-            using(telecomToPhoneConverter).map(source).setPhone(null);
-            map().getAddress().setLine1(source.getAddress().getStreetAddressLine1());
-            map().getAddress().setLine2(source.getAddress().getStreetAddressLine2());
-            map().getAddress().setState(source.getAddress().getStateCode());
-            map().getAddress().setCountry(source.getAddress().getCountryCode());
+            using(telecomsToHomeEmailConverter).map(source).setHomeEmail(null);
+            using(telecomsToWorkEmailConverter).map(source).setWorkEmail(null);
+            using(telecomsToHomePhoneConverter).map(source).setHomePhone(null);
+            using(telecomsToWorkPhoneConverter).map(source).setWorkPhone(null);
+            using(umsAddressesToHomeAddressConverter).map(source).setHomeAddress(null);
+            using(umsAddressesToWorkAddressConverter).map(source).setWorkAddress(null);
         }
     }
 
     @Component
     static class UserDtoToUmsUserDtoMap extends PropertyMap<UserDto, UmsUserDto> {
         @Autowired
-        private EmailPhoneToTelecomConverter emailPhoneToTelecomConverter;
+        private EmailPhoneToTelecomsConverter emailPhoneToTelecomsConverter;
+
+        @Autowired
+        private HomeWorkAddressToAddressesConverter homeWorkAddressToAddressesConverter;
 
         @Override
         protected void configure() {
-            using(emailPhoneToTelecomConverter).map(source).setTelecom(null);
-            map().getAddress().setStreetAddressLine1(source.getAddress().getLine1());
-            map().getAddress().setStreetAddressLine2(source.getAddress().getLine2());
-            map().getAddress().setStateCode(source.getAddress().getState());
-            map().getAddress().setCountryCode(source.getAddress().getCountry());
+            using(emailPhoneToTelecomsConverter).map(source).setTelecoms(null);
+            using(homeWorkAddressToAddressesConverter).map(source).setAddresses(null);
         }
     }
 
     // Converters
     @Component
-    static class TelecomToEmailConverter extends AbstractConverter<UmsUserDto, String> {
-
+    static class TelecomsToHomeEmailConverter extends AbstractConverter<UmsUserDto, String> {
         @Override
         protected String convert(UmsUserDto source) {
-            return source.getTelecom().stream()
-                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(SYSTEM_EMAIL))
+            return source.getTelecoms().stream()
+                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(System.EMAIL.toString())
+                            && telecomDto.getUse().equalsIgnoreCase(Use.HOME.toString()))
                     .map(TelecomDto::getValue)
                     .findFirst()
                     .orElse(null);
@@ -77,11 +99,12 @@ public class ModelMapperConfig {
     }
 
     @Component
-    static class TelecomToPhoneConverter extends AbstractConverter<UmsUserDto, String> {
+    static class TelecomsToWorkEmailConverter extends AbstractConverter<UmsUserDto, String> {
         @Override
         protected String convert(UmsUserDto source) {
-            return source.getTelecom().stream()
-                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(SYSTEM_PHONE))
+            return source.getTelecoms().stream()
+                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(System.EMAIL.toString())
+                            && telecomDto.getUse().equalsIgnoreCase(Use.WORK.toString()))
                     .map(TelecomDto::getValue)
                     .findFirst()
                     .orElse(null);
@@ -89,18 +112,128 @@ public class ModelMapperConfig {
     }
 
     @Component
-    static class EmailPhoneToTelecomConverter extends AbstractConverter<UserDto, List<TelecomDto>> {
+    static class TelecomsToHomePhoneConverter extends AbstractConverter<UmsUserDto, String> {
+        @Override
+        protected String convert(UmsUserDto source) {
+            return source.getTelecoms().stream()
+                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(System.PHONE.toString())
+                            && telecomDto.getUse().equalsIgnoreCase(Use.HOME.toString()))
+                    .map(TelecomDto::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    @Component
+    static class TelecomsToWorkPhoneConverter extends AbstractConverter<UmsUserDto, String> {
+        @Override
+        protected String convert(UmsUserDto source) {
+            return source.getTelecoms().stream()
+                    .filter(telecomDto -> telecomDto.getSystem().equalsIgnoreCase(System.PHONE.toString())
+                            && telecomDto.getUse().equalsIgnoreCase(Use.WORK.toString()))
+                    .map(TelecomDto::getValue)
+                    .findFirst()
+                    .orElse(null);
+        }
+    }
+
+    @Component
+    static class EmailPhoneToTelecomsConverter extends AbstractConverter<UserDto, List<TelecomDto>> {
         @Override
         protected List<TelecomDto> convert(UserDto source) {
-            TelecomDto emailTelecomDto = TelecomDto.builder()
-                    .system(SYSTEM_EMAIL)
-                    .value(source.getEmail())
+            TelecomDto homeEmailTelecomDto = TelecomDto.builder()
+                    .system(System.EMAIL.toString())
+                    .value(source.getHomeEmail())
+                    .use(Use.HOME.toString())
                     .build();
-            TelecomDto phoneTelecomDto = TelecomDto.builder()
-                    .system(SYSTEM_PHONE)
-                    .value(source.getPhone())
+            TelecomDto homePhoneTelecomDto = TelecomDto.builder()
+                    .system(System.PHONE.toString())
+                    .value(source.getHomePhone())
+                    .use(Use.HOME.toString())
                     .build();
-            return Arrays.asList(emailTelecomDto, phoneTelecomDto);
+            TelecomDto workEmailTelecomDto = TelecomDto.builder()
+                    .system(System.EMAIL.toString())
+                    .value(source.getWorkEmail())
+                    .use(Use.WORK.toString())
+                    .build();
+            TelecomDto workPhoneTelecomDto = TelecomDto.builder()
+                    .system(System.PHONE.toString())
+                    .value(source.getWorkPhone())
+                    .use(Use.WORK.toString())
+                    .build();
+            return Arrays.asList(homeEmailTelecomDto, homePhoneTelecomDto, workEmailTelecomDto, workPhoneTelecomDto);
+        }
+    }
+
+    @Component
+    static class UmsAddressesToHomeAddressConverter extends AbstractConverter<UmsUserDto, AddressDto> {
+        @Override
+        protected AddressDto convert(UmsUserDto source) {
+            return source.getAddresses().stream()
+                    .filter(umsAddressDto -> umsAddressDto.getUse().equalsIgnoreCase(Use.HOME.toString()))
+                    .map(this::mapToAddressDto)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        private AddressDto mapToAddressDto(UmsAddressDto umsAddressDto) {
+            return AddressDto.builder()
+                    .line1(umsAddressDto.getLine1())
+                    .line2(umsAddressDto.getLine2())
+                    .city(umsAddressDto.getCity())
+                    .state(umsAddressDto.getStateCode())
+                    .postalCode(umsAddressDto.getPostalCode())
+                    .country(umsAddressDto.getCountryCode())
+                    .build();
+        }
+    }
+
+    @Component
+    static class UmsAddressesToWorkAddressConverter extends AbstractConverter<UmsUserDto, AddressDto> {
+        @Override
+        protected AddressDto convert(UmsUserDto source) {
+            return source.getAddresses().stream()
+                    .filter(umsAddressDto -> umsAddressDto.getUse().equalsIgnoreCase(Use.WORK.toString()))
+                    .map(this::mapToAddressDto)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        private AddressDto mapToAddressDto(UmsAddressDto umsAddressDto) {
+            return AddressDto.builder()
+                    .line1(umsAddressDto.getLine1())
+                    .line2(umsAddressDto.getLine2())
+                    .city(umsAddressDto.getCity())
+                    .state(umsAddressDto.getStateCode())
+                    .postalCode(umsAddressDto.getPostalCode())
+                    .country(umsAddressDto.getCountryCode())
+                    .build();
+        }
+    }
+
+    @Component
+    static class HomeWorkAddressToAddressesConverter extends AbstractConverter<UserDto, List<UmsAddressDto>> {
+        @Override
+        protected List<UmsAddressDto> convert(UserDto source) {
+            UmsAddressDto homeAddressDto = UmsAddressDto.builder()
+                    .line1(source.getHomeAddress().getLine1())
+                    .line2(source.getHomeAddress().getLine2())
+                    .city(source.getHomeAddress().getCity())
+                    .stateCode(source.getHomeAddress().getState())
+                    .postalCode(source.getHomeAddress().getPostalCode())
+                    .countryCode(source.getHomeAddress().getCountry())
+                    .use(Use.HOME.toString())
+                    .build();
+            UmsAddressDto workAddressDto = UmsAddressDto.builder()
+                    .line1(source.getWorkAddress().getLine1())
+                    .line2(source.getWorkAddress().getLine2())
+                    .city(source.getWorkAddress().getCity())
+                    .stateCode(source.getWorkAddress().getState())
+                    .postalCode(source.getWorkAddress().getPostalCode())
+                    .countryCode(source.getWorkAddress().getCountry())
+                    .use(Use.WORK.toString())
+                    .build();
+            return Arrays.asList(homeAddressDto, workAddressDto);
         }
     }
 }

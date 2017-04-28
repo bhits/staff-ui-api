@@ -21,11 +21,13 @@ public class UmsUserDto {
 
     private String socialSecurityNumber;
 
-    private UmsAddressDto address;
+    private List<UmsAddressDto> addresses;
 
-    private List<TelecomDto> telecom;
+    private List<TelecomDto> telecoms;
 
-    private List<RoleDto> role;
+    private List<RoleDto> roles;
 
     private String locale;
+
+    private boolean disabled;
 }

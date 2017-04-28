@@ -21,8 +21,9 @@ public class UserDto {
     @NotBlank
     private String firstName;
 
-    @NotBlank
-    private String email;
+    private String homeEmail;
+
+    private String workEmail;
 
     @Past
     @NotNull
@@ -33,13 +34,19 @@ public class UserDto {
 
     private String socialSecurityNumber;
 
-    private String phone;
+    private String homePhone;
 
-    private AddressDto address;
+    private String workPhone;
+
+    private AddressDto homeAddress;
+
+    private AddressDto workAddress;
 
     @NotNull
-    private List<RoleDto> role;
+    private List<RoleDto> roles;
 
     @NotBlank
     private String locale;
+
+    private boolean disabled;
 }

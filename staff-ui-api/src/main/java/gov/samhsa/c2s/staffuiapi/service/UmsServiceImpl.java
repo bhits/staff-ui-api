@@ -69,4 +69,9 @@ public class UmsServiceImpl implements UmsService {
     public Object getCurrentUserCreationInfo(Long userId) {
         return umsClient.getCurrentUserCreationInfo(userId);
     }
+
+    @Override
+    public void disableUser(Long userId) {
+        umsClient.disableUser(userId);
+    }
 }

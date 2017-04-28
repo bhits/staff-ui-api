@@ -37,4 +37,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.GET)
     Object getCurrentUserCreationInfo(@PathVariable("userId") Long userId);
+
+    @RequestMapping(value = "/users/{userId}/disabled", method = RequestMethod.PUT)
+    void disableUser(@PathVariable("userId") Long userId);
 }

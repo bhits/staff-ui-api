@@ -59,4 +59,9 @@ public class UmsRestController {
     public Object getCurrentUserCreationInfo(@PathVariable Long userId) {
         return umsService.getCurrentUserCreationInfo(userId);
     }
+
+    @PutMapping("/{userId}/disabled")
+    public void disableUser(@PathVariable Long userId) {
+        umsService.disableUser(userId);
+    }
 }

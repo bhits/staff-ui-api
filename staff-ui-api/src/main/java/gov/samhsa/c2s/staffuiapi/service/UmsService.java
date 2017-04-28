@@ -19,4 +19,6 @@ public interface UmsService {
     Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, int xForwardedPort);
 
     Object getCurrentUserCreationInfo(Long userId);
+
+    void disableUser(Long userId);
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Configuration
 public class ModelMapperConfig {
@@ -59,7 +60,7 @@ public class ModelMapperConfig {
         private UmsAddressesToWorkAddressConverter umsAddressesToWorkAddressConverter;
 
         @Autowired
-        private MultiRolesToPatientRoleConverter multiRolesToPatientRoleConverter;
+        private MultiRoleCodesToPatientRoleConverter multiRoleCodesToPatientRoleConverter;
 
         @Override
         protected void configure() {
@@ -69,8 +70,7 @@ public class ModelMapperConfig {
             using(telecomsToWorkPhoneConverter).map(source).setWorkPhone(null);
             using(umsAddressesToHomeAddressConverter).map(source).setHomeAddress(null);
             using(umsAddressesToWorkAddressConverter).map(source).setWorkAddress(null);
-            //ToDO: One user has multiple roles
-            using(multiRolesToPatientRoleConverter).map(source).setRoles(null);
+            using(multiRoleCodesToPatientRoleConverter).map(source).setRoles(null);
         }
     }
 
@@ -83,14 +83,13 @@ public class ModelMapperConfig {
         private HomeWorkAddressToAddressesConverter homeWorkAddressToAddressesConverter;
 
         @Autowired
-        private PatientRoleToMultiRolesConverter patientRoleToMultiRolesConverter;
+        private PatientRoleToMultiRoleCodesConverter patientRoleToMultiRoleCodesConverter;
 
         @Override
         protected void configure() {
             using(emailPhoneToTelecomsConverter).map(source).setTelecoms(null);
             using(homeWorkAddressToAddressesConverter).map(source).setAddresses(null);
-            //ToDO: One user has multiple roles
-            using(patientRoleToMultiRolesConverter).map(source).setRoles(null);
+            using(patientRoleToMultiRoleCodesConverter).map(source).setRoles(null);
         }
     }
 
@@ -199,27 +198,24 @@ public class ModelMapperConfig {
         }
     }
 
-    //Todo: Will remove when One user has multiple roles
     @Component
-    static class MultiRolesToPatientRoleConverter extends AbstractConverter<UmsUserDto, String> {
+    static class MultiRoleCodesToPatientRoleConverter extends AbstractConverter<UmsUserDto, List<String>> {
 
         @Override
-        protected String convert(UmsUserDto source) {
+        protected List<String> convert(UmsUserDto source) {
             return source.getRoles().stream()
-                    .filter(roleDto -> roleDto.getCode().equalsIgnoreCase("patient"))
                     .map(RoleDto::getCode)
-                    .findFirst()
-                    .orElse(null);
+                    .collect(Collectors.toList());
         }
     }
 
     @Component
-    static class PatientRoleToMultiRolesConverter extends AbstractConverter<UserDto, List<RoleDto>> {
+    static class PatientRoleToMultiRoleCodesConverter extends AbstractConverter<UserDto, List<RoleDto>> {
         @Override
         protected List<RoleDto> convert(UserDto source) {
-            RoleDto roleDto = new RoleDto();
-            roleDto.setCode(source.getRoles());
-            return Arrays.asList(roleDto);
+            return source.getRoles().stream()
+                    .map(roleCode -> RoleDto.builder().code(roleCode).build())
+                    .collect(Collectors.toList());
         }
     }
 }

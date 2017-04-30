@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -43,7 +44,7 @@ public class UserDto {
 
     //ToDO: One user has multiple roles
     @NotNull
-    private String roles;
+    private List<String> roles;
 
     @NotBlank
     private String locale;

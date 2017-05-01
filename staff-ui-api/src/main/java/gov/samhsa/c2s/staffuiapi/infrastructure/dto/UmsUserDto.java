@@ -30,4 +30,6 @@ public class UmsUserDto {
     private String locale;
 
     private boolean disabled;
+
+    private String mrn;
 }

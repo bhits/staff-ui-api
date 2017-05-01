@@ -42,7 +42,6 @@ public class UserDto {
 
     private UmsAddressDto workAddress;
 
-    //ToDO: One user has multiple roles
     @NotNull
     private List<String> roles;
 
@@ -50,4 +49,6 @@ public class UserDto {
     private String locale;
 
     private boolean disabled;
+
+    private String mrn;
 }

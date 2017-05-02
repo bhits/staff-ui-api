@@ -4,15 +4,15 @@ import lombok.Data;
 
 @Data
 public class BaseUmsLookupDto {
-    String code;
+    private String code;
 
-    String displayName;
+    private String displayName;
 
-    String description;
+    private String description;
 
-    String codeSystem;
+    private String codeSystem;
 
-    String codeSystemOID;
+    private String codeSystemOID;
 
-    String codeSystemName;
+    private String codeSystemName;
 }

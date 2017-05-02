@@ -1,38 +1,35 @@
 package gov.samhsa.c2s.staffuiapi.infrastructure.dto;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class UserDto {
-
+public class UmsUserDto {
     private Long id;
 
-    @NotEmpty
     private String lastName;
 
-    @NotEmpty
+    private String middleName;
+
     private String firstName;
 
-    @Past
-    @NotNull
     private LocalDate birthDate;
 
-    @NotEmpty
     private String genderCode;
 
     private String socialSecurityNumber;
 
-    private AddressDto address;
+    private List<UmsAddressDto> addresses;
 
-    private List<TelecomDto> telecom;
+    private List<TelecomDto> telecoms;
 
-    private String role;
+    private List<RoleDto> roles;
 
     private String locale;
+
+    private boolean disabled;
+
+    private String mrn;
 }

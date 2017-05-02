@@ -1,16 +1,27 @@
 package gov.samhsa.c2s.staffuiapi.infrastructure.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Pattern;
 
 @Data
-public class AddressDto {
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UmsAddressDto {
 
     /**
-     * The street address line.
+     * The street address line1.
      */
-    private String streetAddressLine;
+    private String line1;
+
+    /**
+     * The street address line2.
+     */
+    private String line2;
 
     /**
      * The city.
@@ -32,4 +43,6 @@ public class AddressDto {
      * The country code.
      */
     private String countryCode;
+
+    private String use;
 }

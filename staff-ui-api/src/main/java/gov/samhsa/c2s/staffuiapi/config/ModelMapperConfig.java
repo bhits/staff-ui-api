@@ -156,12 +156,16 @@ public class ModelMapperConfig {
                     .value(source.getHomeEmail())
                     .use(Use.HOME.toString())
                     .build();
-            TelecomDto homePhoneTelecomDto = TelecomDto.builder()
-                    .system(System.PHONE.toString())
-                    .value(source.getHomePhone())
-                    .use(Use.HOME.toString())
-                    .build();
-            return Arrays.asList(homeEmailTelecomDto, homePhoneTelecomDto);
+            if (source.getHomePhone() != null) {
+                TelecomDto homePhoneTelecomDto = TelecomDto.builder()
+                        .system(System.PHONE.toString())
+                        .value(source.getHomePhone())
+                        .use(Use.HOME.toString())
+                        .build();
+                return Arrays.asList(homeEmailTelecomDto, homePhoneTelecomDto);
+            } else {
+                return Arrays.asList(homeEmailTelecomDto);
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 # Staff User Interface API
 
-The Staff User Interface API (staff-ui-api) is a Backend For Frontend(BFF) component of Consent2Share (C2S)
+The Staff User Interface API (staff-ui-api) is a Backend For Frontend(BFF) component of Consent2Share
 
 ## Build
 

@@ -32,4 +32,6 @@ public class UmsUserDto {
     private boolean disabled;
 
     private String mrn;
+
+    private List<IdentifierDto> identifiers;
 }

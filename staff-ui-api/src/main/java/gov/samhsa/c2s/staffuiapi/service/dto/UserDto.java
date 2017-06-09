@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 public class UserDto {
@@ -54,6 +55,8 @@ public class UserDto {
 
     private String mrn;
 
+    private Optional<String> registrationPurposeEmail;
+
     @Valid
-    private List<IdentifierDto> identifiers;
+    private Optional<List<IdentifierDto>> identifiers;
 }

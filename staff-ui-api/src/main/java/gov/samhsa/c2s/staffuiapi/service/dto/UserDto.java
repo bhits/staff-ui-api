@@ -1,13 +1,16 @@
 package gov.samhsa.c2s.staffuiapi.service.dto;
 
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.IdentifierDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsAddressDto;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 public class UserDto {
@@ -51,4 +54,9 @@ public class UserDto {
     private boolean disabled;
 
     private String mrn;
+
+    private Optional<String> registrationPurposeEmail;
+
+    @Valid
+    private Optional<List<IdentifierDto>> identifiers;
 }

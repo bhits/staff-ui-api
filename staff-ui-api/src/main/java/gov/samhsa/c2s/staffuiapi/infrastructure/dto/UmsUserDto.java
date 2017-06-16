@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 public class UmsUserDto {
@@ -32,4 +33,8 @@ public class UmsUserDto {
     private boolean disabled;
 
     private String mrn;
+
+    private Optional<String> registrationPurposeEmail;
+
+    private Optional<List<IdentifierDto>> identifiers;
 }

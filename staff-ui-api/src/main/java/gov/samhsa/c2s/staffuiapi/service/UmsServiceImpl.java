@@ -1,8 +1,11 @@
 package gov.samhsa.c2s.staffuiapi.service;
 
 import gov.samhsa.c2s.staffuiapi.infrastructure.UmsClient;
+import gov.samhsa.c2s.staffuiapi.infrastructure.UmsLookupClient;
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.BaseUmsLookupDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.PageableDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsUserDto;
+import gov.samhsa.c2s.staffuiapi.service.dto.ProfileResponse;
 import gov.samhsa.c2s.staffuiapi.service.dto.UserDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -17,6 +20,9 @@ import java.util.stream.Collectors;
 public class UmsServiceImpl implements UmsService {
     @Autowired
     private UmsClient umsClient;
+
+    @Autowired
+    private UmsLookupClient umsLookupClient;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -78,5 +84,19 @@ public class UmsServiceImpl implements UmsService {
     @Override
     public void enableUser(Long userId) {
         umsClient.enableUser(userId);
+    }
+
+    @Override
+    public ProfileResponse getProviderProfile() {
+        //Get system supported Locales
+        List<BaseUmsLookupDto> supportedLocales = umsLookupClient.getLocales();
+        // TODO Implement get Provider profile from DB
+        return ProfileResponse.builder()
+                .userLocale("en")
+                .supportedLocales(supportedLocales)
+                .username("")
+                .firstName("Admin")
+                .lastName("Staff")
+                .build();
     }
 }

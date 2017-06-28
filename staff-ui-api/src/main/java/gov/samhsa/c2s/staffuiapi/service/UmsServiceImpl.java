@@ -90,7 +90,7 @@ public class UmsServiceImpl implements UmsService {
     public ProfileResponse getProviderProfile() {
         //Get system supported Locales
         List<BaseUmsLookupDto> supportedLocales = umsLookupClient.getLocales();
-        // TODO Implement get Provider profile from DB
+        // TODO Implement get staff profile from DB
         return ProfileResponse.builder()
                 .userLocale("en")
                 .supportedLocales(supportedLocales)

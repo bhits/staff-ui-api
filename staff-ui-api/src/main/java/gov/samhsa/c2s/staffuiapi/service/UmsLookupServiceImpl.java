@@ -19,6 +19,7 @@ public class UmsLookupServiceImpl implements UmsLookupService {
                 .countryCodes(umsLookupClient.getCountryCodes())
                 .locales(umsLookupClient.getLocales())
                 .roles(umsLookupClient.getRoles())
+                .identifierSystems(umsLookupClient.getIdentifierSystem())
                 .build();
     }
 }

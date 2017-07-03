@@ -1,6 +1,7 @@
 package gov.samhsa.c2s.staffuiapi.infrastructure;
 
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.BaseUmsLookupDto;
+import gov.samhsa.c2s.staffuiapi.infrastructure.dto.IdentifierSystemDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.RoleDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,4 +25,7 @@ public interface UmsLookupClient {
 
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
     List<RoleDto> getRoles();
+
+    @RequestMapping(value = "/identifierSystems", method = RequestMethod.GET)
+    List<IdentifierSystemDto> getIdentifierSystem();
 }

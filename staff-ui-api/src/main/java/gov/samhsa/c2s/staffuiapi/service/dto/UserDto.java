@@ -59,4 +59,8 @@ public class UserDto {
 
     @Valid
     private Optional<List<IdentifierDto>> identifiers;
+
+    private String createdBy;
+
+    private String lastUpdatedBy;
 }

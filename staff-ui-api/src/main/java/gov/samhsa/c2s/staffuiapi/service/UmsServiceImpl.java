@@ -5,6 +5,7 @@ import gov.samhsa.c2s.staffuiapi.infrastructure.UmsLookupClient;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.BaseUmsLookupDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.PageableDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.UmsUserDto;
+import gov.samhsa.c2s.staffuiapi.service.dto.JwtTokenKey;
 import gov.samhsa.c2s.staffuiapi.service.dto.ProfileResponse;
 import gov.samhsa.c2s.staffuiapi.service.dto.UserDto;
 import org.modelmapper.ModelMapper;
@@ -27,6 +28,13 @@ public class UmsServiceImpl implements UmsService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private final JwtTokenExtractor jwtTokenExtractor;
+
+    public UmsServiceImpl(JwtTokenExtractor jwtTokenExtractor) {
+        this.jwtTokenExtractor = jwtTokenExtractor;
+    }
+
     @Override
     public PageableDto<UserDto> getAllUsers(Integer page, Integer size) {
         //Mapping of generic parameterized types
@@ -46,6 +54,8 @@ public class UmsServiceImpl implements UmsService {
 
     @Override
     public void registerUser(UserDto userDto) {
+        userDto.setCreatedBy(getLastUpddatedBy());
+        userDto.setLastUpdatedBy(getLastUpddatedBy());
         umsClient.registerUser(modelMapper.map(userDto, UmsUserDto.class));
     }
 
@@ -63,12 +73,13 @@ public class UmsServiceImpl implements UmsService {
 
     @Override
     public void updateUser(Long userId, UserDto userDto) {
+        userDto.setLastUpdatedBy(getLastUpddatedBy());
         umsClient.updateUser(userId, modelMapper.map(userDto, UmsUserDto.class));
     }
 
     @Override
     public Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, int xForwardedPort) {
-        return umsClient.initiateUserActivation(userId, xForwardedProto, xForwardedHost, xForwardedPort);
+        return umsClient.initiateUserActivation(userId, getLastUpddatedBy(), xForwardedProto, xForwardedHost, xForwardedPort);
     }
 
     @Override
@@ -78,12 +89,12 @@ public class UmsServiceImpl implements UmsService {
 
     @Override
     public void disableUser(Long userId) {
-        umsClient.disableUser(userId);
+        umsClient.disableUser(userId, getLastUpddatedBy());
     }
 
     @Override
     public void enableUser(Long userId) {
-        umsClient.enableUser(userId);
+        umsClient.enableUser(userId, getLastUpddatedBy());
     }
 
     @Override
@@ -98,5 +109,9 @@ public class UmsServiceImpl implements UmsService {
                 .firstName("Admin")
                 .lastName("Staff")
                 .build();
+    }
+
+    private String getLastUpddatedBy() {
+        return jwtTokenExtractor.getValueByKey(JwtTokenKey.USER_ID);
     }
 }

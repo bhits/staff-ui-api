@@ -31,6 +31,7 @@ public interface UmsClient {
 
     @RequestMapping(value = "/users/{userId}/activation", method = RequestMethod.POST)
     Object initiateUserActivation(@PathVariable("userId") Long userId,
+                                  @RequestParam(value = "lastUpdatedBy") String lastUpdatedBy,
                                   @RequestHeader(X_FORWARDED_PROTO) String xForwardedProto,
                                   @RequestHeader(X_FORWARDED_HOST) String xForwardedHost,
                                   @RequestHeader(X_FORWARDED_PORT) int xForwardedPort);
@@ -39,8 +40,10 @@ public interface UmsClient {
     Object getCurrentUserCreationInfo(@PathVariable("userId") Long userId);
 
     @RequestMapping(value = "/users/{userId}/disabled", method = RequestMethod.PUT)
-    void disableUser(@PathVariable("userId") Long userId);
+    void disableUser(@PathVariable("userId") Long userId,
+                     @RequestParam(value = "lastUpdatedBy") String lastUpdatedBy);
 
-    @RequestMapping(value = "/users/{userId}/enabled", method = RequestMethod.PUT)
-    void enableUser(@PathVariable("userId") Long userId);
+    @RequestMapping(value = "/users/{userId}/enabled/", method = RequestMethod.PUT)
+    void enableUser(@PathVariable("userId") Long userId,
+                    @RequestParam(value = "lastUpdatedBy") String lastUpdatedBy);
 }

@@ -19,17 +19,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class UmsServiceImpl implements UmsService {
-    @Autowired
-    private UmsClient umsClient;
-
-    @Autowired
-    private UmsLookupClient umsLookupClient;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     private final JwtTokenExtractor jwtTokenExtractor;
+    @Autowired
+    private UmsClient umsClient;
+    @Autowired
+    private UmsLookupClient umsLookupClient;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public UmsServiceImpl(JwtTokenExtractor jwtTokenExtractor) {
         this.jwtTokenExtractor = jwtTokenExtractor;
@@ -78,7 +76,7 @@ public class UmsServiceImpl implements UmsService {
     }
 
     @Override
-    public Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, int xForwardedPort) {
+    public Object initiateUserActivation(Long userId, String xForwardedProto, String xForwardedHost, String xForwardedPort) {
         return umsClient.initiateUserActivation(userId, getLastUpddatedBy(), xForwardedProto, xForwardedHost, xForwardedPort);
     }
 

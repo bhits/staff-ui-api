@@ -6,9 +6,9 @@ The Staff User Interface API (staff-ui-api) is a Backend For Frontend (BFF) comp
 
 # Supported Source Code Tags and Current `Dockerfile` Link
 
-[`0.2.0 (latest)`](https://github.com/bhits-dev/staff-ui-api/releases/tag/0.2.0), [`0.1.0`](https://github.com/bhits-dev/staff-ui-api/releases/tag/0.1.0)
+[`0.3.0 (latest)`](https://github.com/bhits-dev/staff-ui-api/releases/tag/0.3.0), [`0.2.0`](https://github.com/bhits-dev/staff-ui-api/releases/tag/0.2.0), [`0.1.0`](https://github.com/bhits-dev/staff-ui-api/releases/tag/0.1.0)
 
-[`Current Dockerfile`](https://github.com/bhits-dev/staff-ui-api/blob/master/staff-ui-api/src/main/docker/Dockerfile)
+[`Current Dockerfile`](../staff-ui-api/src/main/docker/Dockerfile)
 
 For more information about this image, the source code, and its history, please see the [GitHub repository](https://github.com/bhits-dev/staff-ui-api).
 

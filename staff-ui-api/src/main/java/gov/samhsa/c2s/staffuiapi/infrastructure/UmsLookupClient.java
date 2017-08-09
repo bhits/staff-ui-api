@@ -4,10 +4,12 @@ import gov.samhsa.c2s.staffuiapi.infrastructure.dto.BaseUmsLookupDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.IdentifierSystemDto;
 import gov.samhsa.c2s.staffuiapi.infrastructure.dto.RoleDto;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Locale;
 
 @FeignClient("ums")
 public interface UmsLookupClient {
@@ -21,11 +23,11 @@ public interface UmsLookupClient {
     List<BaseUmsLookupDto> getCountryCodes();
 
     @RequestMapping(value = "/gendercodes", method = RequestMethod.GET)
-    List<BaseUmsLookupDto> getGenderCodes();
+    List<BaseUmsLookupDto> getGenderCodes(@RequestHeader("Accept-Language") Locale locale);
 
     @RequestMapping(value = "/roles", method = RequestMethod.GET)
-    List<RoleDto> getRoles();
+    List<RoleDto> getRoles(@RequestHeader("Accept-Language") Locale locale);
 
     @RequestMapping(value = "/identifierSystems", method = RequestMethod.GET)
-    List<IdentifierSystemDto> getIdentifierSystem();
+    List<IdentifierSystemDto> getIdentifierSystem(@RequestHeader("Accept-Language") Locale locale);
 }

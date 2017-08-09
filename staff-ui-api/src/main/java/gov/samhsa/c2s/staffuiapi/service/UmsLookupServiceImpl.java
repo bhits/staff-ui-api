@@ -3,6 +3,7 @@ package gov.samhsa.c2s.staffuiapi.service;
 import gov.samhsa.c2s.staffuiapi.infrastructure.UmsLookupClient;
 import gov.samhsa.c2s.staffuiapi.service.dto.UserCreationLookupDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -14,7 +15,8 @@ public class UmsLookupServiceImpl implements UmsLookupService {
     private UmsLookupClient umsLookupClient;
 
     @Override
-    public UserCreationLookupDto getUserCreationLookupInfo(Locale locale) {
+    public UserCreationLookupDto getUserCreationLookupInfo() {
+        Locale locale  = LocaleContextHolder.getLocale();
         return UserCreationLookupDto.builder()
                 .genderCodes(umsLookupClient.getGenderCodes(locale))
                 .stateCodes(umsLookupClient.getStateCodes())

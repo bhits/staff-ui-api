@@ -18,7 +18,7 @@ public class UmsLookupRestController {
     private UmsLookupService umsLookupService;
 
     @GetMapping("/userCreationLookupInfo")
-    public UserCreationLookupDto getUserCreationLookupInfo(@RequestHeader("Accept-Language") Locale locale) {
-        return umsLookupService.getUserCreationLookupInfo(locale);
+    public UserCreationLookupDto getUserCreationLookupInfo() {
+        return umsLookupService.getUserCreationLookupInfo();
     }
 }

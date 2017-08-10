@@ -30,12 +30,15 @@ public class SecurityConfig {
                     http.requiresChannel().anyRequest().requiresSecure();
                 }
                 http.authorizeRequests()
+                        .antMatchers(HttpMethod.GET, "/ums/staffs/**").access(hasScopes("staffUiApi.read"))
                         .antMatchers(HttpMethod.GET, "/ums/users/**").access(hasScopes("staffUiApi.read"))
                         .antMatchers(HttpMethod.POST, "/ums/users/**").access(hasScopes("staffUiApi.write"))
                         .antMatchers(HttpMethod.DELETE, "/ums/users/**").access(hasScopes("staffUiApi.write"))
                         .antMatchers(HttpMethod.PUT, "/ums/users/**").access(hasScopes("staffUiApi.write"))
                         .antMatchers(HttpMethod.OPTIONS, "/ums/users/**").access(hasScopes("staffUiApi.write"))
-                        .antMatchers(HttpMethod.GET, "/ums/**").permitAll()
+
+                        .antMatchers(HttpMethod.GET, "/ums/userCreationLookupInfo").permitAll()
+                        .antMatchers(HttpMethod.POST, "/uaa/login").permitAll()
                         .anyRequest().denyAll();
             }
         };

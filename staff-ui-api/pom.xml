@@ -25,6 +25,7 @@
         <c2s-common-libraries.version>1.10.0</c2s-common-libraries.version>
         <docker.maven.version>0.4.13</docker.maven.version>
         <modelmapper.version>0.7.7</modelmapper.version>
+        <openfeign.form.version>2.1.0</openfeign.form.version>
     </properties>
 
     <dependencies>
@@ -93,6 +94,11 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>${openfeign.form.version}</version>
         </dependency>
         <!--C2S Dependencies-->
         <dependency>

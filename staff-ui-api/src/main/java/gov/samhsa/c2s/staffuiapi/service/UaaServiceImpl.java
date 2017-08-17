@@ -5,6 +5,7 @@ import gov.samhsa.c2s.staffuiapi.infrastructure.UaaClient;
 import gov.samhsa.c2s.staffuiapi.service.dto.LoginRequestDto;
 import gov.samhsa.c2s.staffuiapi.service.exception.AccountLockedException;
 import gov.samhsa.c2s.staffuiapi.service.exception.BadCredentialsException;
+import gov.samhsa.c2s.staffuiapi.service.exception.UserUnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,6 @@ public class UaaServiceImpl implements UaaService {
                 throw new AccountLockedException();
             }
         }
-        return null;
+        throw new UserUnauthorizedException();
     }
 }

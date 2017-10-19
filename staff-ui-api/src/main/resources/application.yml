@@ -12,11 +12,14 @@ security:
     client:
       client-id: staff-ui-api
 c2s:
+  staff-ui:
+    features:
+          demo-disclaimer-enabled: false
   staff-ui-api:
     # Please configure valid config below to connect to UAA server
     # Configure base-url, client-id, client-secret per environment
     oauth2:
-      base-url: http://localhost/uaa
+      base-url: http://localhost:9999/uaa
       client:
         client-id: staff-ui
         client-secret: changeit
